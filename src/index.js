@@ -1,5 +1,6 @@
 import App from "./App";
 import { createStore } from "redux";
+import { act } from "react-dom/test-utils";
 
 const add = document.getElementById("add");
 const minus = document.getElementById("minus");
@@ -15,11 +16,12 @@ const countModifier = (count = 0, action) => {
   }
 };
 
+const onChange = () => {
+  number.innerText = countStore.getState();
+};
+
 const countStore = createStore(countModifier);
+countStore.subscribe(onChange);
 
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "MINUS" });
-
-console.log(countStore.getState());
+add.addEventListener("click", () => countStore.dispatch({ type: "ADD" }));
+minus.addEventListener("click", () => countStore.dispatch({ type: "MINUS" }));
